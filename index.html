@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Image Generators 2026 — Comparative Infographic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --bg-deep: #06060e;
+  --bg-surface: #0c0c1a;
+  --bg-card: rgba(14, 14, 32, 0.65);
+  --glass: rgba(255,255,255,0.03);
+  --glass-border: rgba(255,255,255,0.06);
+  --glass-hover: rgba(255,255,255,0.07);
+  --text-primary: #e8e6f0;
+  --text-secondary: #8b89a0;
+  --text-muted: #5a587a;
+  --accent-cyan: #00e5ff;
+  --accent-magenta: #ff2daa;
+  --accent-violet: #9d4edd;
+  --accent-lime: #a3ff12;
+  --accent-orange: #ff6d00;
+  --accent-gold: #ffd600;
+  --gradient-hero: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 30%, #0a1a2e 60%, #0a0a1a 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet), var(--accent-magenta));
+  --gradient-bar: linear-gradient(90deg, var(--accent-cyan), var(--accent-violet));
+  --radius: 12px;
+  --radius-lg: 20px;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NOISE OVERLAY
+   ═══════════════════════════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--accent-violet); border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY
+   ═══════════════════════════════════════════════════════════ */
+.container { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent-cyan);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 64px);
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 16px;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 600px;
+}
+
+.section-header {
+  margin-bottom: 48px;
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ═══════════════════════════════════════════════════════════
+   LANGUAGE TOGGLE
+   ═══════════════════════════════════════════════════════════ */
+.lang-toggle {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  background: rgba(10,10,26,0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 40px;
+  overflow: hidden;
+}
+.lang-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+.lang-btn.active {
+  background: var(--gradient-accent);
+  color: #fff;
+}
+.lang-btn:hover:not(.active) {
+  color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--gradient-hero);
+}
+
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent);
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  animation: orbFloat 12s ease-in-out infinite;
+}
+.hero-orb-1 {
+  width: 500px; height: 500px;
+  background: rgba(157,78,221,0.15);
+  top: -100px; right: -100px;
+  animation-delay: 0s;
+}
+.hero-orb-2 {
+  width: 400px; height: 400px;
+  background: rgba(0,229,255,0.1);
+  bottom: -50px; left: -50px;
+  animation-delay: -4s;
+}
+.hero-orb-3 {
+  width: 300px; height: 300px;
+  background: rgba(255,45,170,0.08);
+  top: 40%; left: 50%;
+  animation-delay: -8s;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.05); }
+  66% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 80px 0;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 2px;
+  background: var(--accent-cyan);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 9vw, 130px);
+  line-height: 0.92;
+  letter-spacing: 3px;
+  margin-bottom: 24px;
+}
+.hero-title .line-1 {
+  display: block;
+  color: var(--text-primary);
+}
+.hero-title .line-2 {
+  display: block;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-title .line-3 {
+  display: block;
+  color: var(--text-primary);
+  opacity: 0.4;
+  font-size: 0.55em;
+}
+
+.hero-desc {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  max-width: 520px;
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  position: relative;
+  padding-left: 16px;
+}
+.hero-stat::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 3px;
+  height: 32px;
+  background: var(--gradient-accent);
+  border-radius: 2px;
+}
+.hero-stat-value {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: var(--text-primary);
+  line-height: 1;
+}
+.hero-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+.hero-scroll-hint .arrow {
+  width: 16px;
+  height: 16px;
+  border-right: 1.5px solid var(--text-muted);
+  border-bottom: 1.5px solid var(--text-muted);
+  transform: rotate(45deg);
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN TABLE SECTION
+   ═══════════════════════════════════════════════════════════ */
+.table-section {
+  padding: 120px 0;
+  position: relative;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+}
+
+.data-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.data-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.data-table th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  padding: 18px 16px;
+  text-align: left;
+  background: rgba(0,229,255,0.04);
+  border-bottom: 1px solid var(--glass-border);
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.025);
+  transition: background 0.2s;
+  vertical-align: middle;
+}
+.data-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+.model-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+.model-provider {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.score-badge {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
+.score-tier-1 { background: rgba(0,229,255,0.12); color: var(--accent-cyan); }
+.score-tier-2 { background: rgba(157,78,221,0.12); color: var(--accent-violet); }
+.score-tier-3 { background: rgba(255,255,255,0.06); color: var(--text-secondary); }
+
+.price-cell {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.speed-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.speed-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--gradient-bar);
+  transition: width 1s var(--ease-out-expo);
+}
+.speed-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.text-quality-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.text-quality-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 60px;
+}
+.text-quality-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1.2s var(--ease-out-expo);
+}
+.tq-excellent { background: var(--accent-cyan); }
+.tq-good { background: var(--accent-violet); }
+.tq-fair { background: var(--accent-orange); }
+.tq-low { background: var(--accent-magenta); }
+
+.text-quality-pct {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 36px;
+}
+
+.best-for-tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  display: inline-block;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.rank-num {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--text-muted);
+  width: 32px;
+  text-align: center;
+}
+.rank-num.top-3 { color: var(--accent-gold); }
+
+/* ═══════════════════════════════════════════════════════════
+   CHARTS SECTION
+   ═══════════════════════════════════════════════════════════ */
+.charts-section {
+  padding: 80px 0 120px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.chart-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.chart-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-accent);
+}
+
+.chart-card-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+/* Bar chart custom */
+.bar-chart { display: flex; flex-direction: column; gap: 14px; }
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  min-width: 110px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bar-track {
+  flex: 1;
+  height: 22px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.5s var(--ease-out-expo);
+  position: relative;
+}
+.bar-fill::after {
+  content: attr(data-value);
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.bar-gradient-1 { background: linear-gradient(90deg, #00e5ff, #00b8d4); }
+.bar-gradient-2 { background: linear-gradient(90deg, #9d4edd, #7b2cbf); }
+.bar-gradient-3 { background: linear-gradient(90deg, #ff2daa, #c9184a); }
+.bar-gradient-4 { background: linear-gradient(90deg, #a3ff12, #76c000); }
+.bar-gradient-5 { background: linear-gradient(90deg, #ffd600, #ff9e00); }
+
+/* Radar chart canvas */
+.radar-canvas-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+.radar-canvas-wrap canvas {
+  max-width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   WINNERS SECTION
+   ═══════════════════════════════════════════════════════════ */
+.winners-section {
+  padding: 80px 0 120px;
+}
+
+.winners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.winner-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s ease;
+}
+.winner-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.winner-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+.winner-card.cat-overall::before { background: var(--accent-cyan); }
+.winner-card.cat-social::before { background: var(--accent-magenta); }
+.winner-card.cat-free::before { background: var(--accent-lime); }
+.winner-card.cat-text::before { background: var(--accent-gold); }
+.winner-card.cat-art::before { background: var(--accent-violet); }
+.winner-card.cat-ecom::before { background: var(--accent-orange); }
+
+.winner-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.winner-category {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.cat-overall .winner-category { color: var(--accent-cyan); }
+.cat-social .winner-category { color: var(--accent-magenta); }
+.cat-free .winner-category { color: var(--accent-lime); }
+.cat-text .winner-category { color: var(--accent-gold); }
+.cat-art .winner-category { color: var(--accent-violet); }
+.cat-ecom .winner-category { color: var(--accent-orange); }
+
+.winner-model {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.winner-reason {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PRICING TIERS
+   ═══════════════════════════════════════════════════════════ */
+.pricing-section {
+  padding: 80px 0 120px;
+}
+
+.pricing-tiers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.pricing-tier {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: center;
+  transition: transform 0.4s var(--ease-out-expo);
+  position: relative;
+}
+.pricing-tier:hover {
+  transform: translateY(-4px);
+}
+.pricing-tier.tier-highlight {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 40px rgba(0,229,255,0.08);
+}
+.pricing-tier.tier-highlight::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-lg);
+  padding: 1px;
+  background: var(--gradient-accent);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.tier-name {
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+.tier-price {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent-cyan);
+  margin-bottom: 20px;
+}
+.tier-models {
+  list-style: none;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.tier-models li {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.tier-models li:last-child { border-bottom: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   FLOWCHART
+   ═══════════════════════════════════════════════════════════ */
+.flowchart-section {
+  padding: 80px 0 120px;
+}
+
+.flowchart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.flow-node {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 20px 32px;
+  text-align: center;
+  max-width: 340px;
+  width: 100%;
+  position: relative;
+}
+.flow-node.flow-question {
+  border-color: var(--accent-violet);
+  background: rgba(157,78,221,0.06);
+}
+.flow-node.flow-answer {
+  border-color: var(--accent-cyan);
+  background: rgba(0,229,255,0.04);
+}
+
+.flow-question-text {
+  font-weight: 600;
+  font-size: 14px;
+}
+.flow-answer-text {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+.flow-answer-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.flow-connector {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.flow-line-v {
+  width: 2px;
+  height: 32px;
+  background: rgba(255,255,255,0.1);
+}
+.flow-branches {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  margin-top: 0;
+}
+.flow-branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.flow-branch-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-muted);
+}
+.flow-branch-label.yes { color: var(--accent-lime); background: rgba(163,255,18,0.06); }
+.flow-branch-label.no { color: var(--accent-magenta); background: rgba(255,45,170,0.06); }
+
+.flow-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SOCIAL MEDIA SECTION
+   ═══════════════════════════════════════════════════════════ */
+.social-section {
+  padding: 80px 0 120px;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.social-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+.social-card:hover {
+  transform: translateY(-4px);
+}
+
+.social-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.social-platform {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.social-rec {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.social-rec strong {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════ */
+.footer {
+  padding: 60px 0;
+  border-top: 1px solid var(--glass-border);
+}
+
+.footer-sources {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 2;
+}
+.footer-sources a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-sources a:hover { color: var(--accent-cyan); }
+
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 24px;
+  letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .charts-grid { grid-template-columns: 1fr; }
+  .pricing-tiers { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .hero-stats { gap: 24px; }
+  .pricing-tiers { grid-template-columns: 1fr; }
+  .winners-grid { grid-template-columns: 1fr; }
+  .social-grid { grid-template-columns: 1fr; }
+  .flow-row { flex-direction: column; align-items: center; }
+  .container { padding: 0 16px; }
+  .lang-toggle { top: 12px; right: 12px; }
+  .lang-btn { padding: 8px 14px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════
+     LANGUAGE TOGGLE
+     ════════════════════════════════════════════════════════════ -->
+<div class="lang-toggle">
+  <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     HERO SECTION
+     ════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="container hero-content">
+    <div class="hero-eyebrow">
+      <span data-en="Comparative Research — March 2026" data-ru="Сравнительное исследование — Март 2026"></span>
+    </div>
+    <h1 class="hero-title">
+      <span class="line-1" data-en="AI IMAGE" data-ru="ИИ-ГЕНЕРАЦИЯ"></span>
+      <span class="line-2" data-en="GENERATORS" data-ru="ИЗОБРАЖЕНИЙ"></span>
+      <span class="line-3" data-en="FOR SOCIAL MEDIA" data-ru="ДЛЯ СОЦСЕТЕЙ"></span>
+    </h1>
+    <p class="hero-desc" data-en="A comprehensive comparison of 12 leading AI image generation models — their strengths, pricing, speed, and optimal social media use cases." data-ru="Подробное сравнение 12 ведущих моделей генерации изображений с помощью ИИ — возможности, цены, скорость и лучшие сценарии использования для соцсетей."></p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">12</div>
+        <div class="hero-stat-label" data-en="Models Compared" data-ru="Моделей сравнено"></div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">6</div>
+        <div class="hero-stat-label" data-en="Categories" data-ru="Категорий"></div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">5</div>
+        <div class="hero-stat-label" data-en="Social Platforms" data-ru="Соцсетей"></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span data-en="Scroll" data-ru="Вниз"></span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     COMPARISON TABLE
+     ════════════════════════════════════════════════════════════ -->
+<section class="table-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-en="Data Overview" data-ru="Обзор данных"></div>
+      <h2 class="section-title" data-en="FULL COMPARISON" data-ru="ПОЛНОЕ СРАВНЕНИЕ"></h2>
+      <p class="section-subtitle" data-en="All 12 models ranked by LM Arena score with pricing, speed, and text rendering accuracy." data-ru="Все 12 моделей ранжированы по LM Arena с указанием цен, скорости и качества рендеринга текста."></p>
+    </div>
+    <div class="table-wrap reveal reveal-delay-1">
+      <table class="data-table" id="mainTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th data-en="Model" data-ru="Модель"></th>
+            <th data-en="Score" data-ru="Рейтинг"></th>
+            <th data-en="Price" data-ru="Цена"></th>
+            <th data-en="Speed" data-ru="Скорость"></th>
+            <th data-en="Text Quality" data-ru="Текст в изобр."></th>
+            <th data-en="Best For" data-ru="Лучше всего для"></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     CHARTS
+     ════════════════════════════════════════════════════════════ -->
+<section class="charts-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-en="Visual Analysis" data-ru="Визуальный анализ"></div>
+      <h2 class="section-title" data-en="MODEL METRICS" data-ru="МЕТРИКИ МОДЕЛЕЙ"></h2>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card reveal">
+        <div class="chart-card-title" data-en="Quality Score Ranking" data-ru="Рейтинг качества"></div>
+        <div class="bar-chart" id="qualityChart"></div>
+      </div>
+      <div class="chart-card reveal reveal-delay-1">
+        <div class="chart-card-title" data-en="Text Rendering Accuracy" data-ru="Точность рендеринга текста"></div>
+        <div class="bar-chart" id="textChart"></div>
+      </div>
+      <div class="chart-card reveal reveal-delay-2">
+        <div class="chart-card-title" data-en="Speed Comparison" data-ru="Сравнение скорости"></div>
+        <div class="bar-chart" id="speedChart"></div>
+      </div>
+      <div class="chart-card reveal reveal-delay-3">
+        <div class="chart-card-title" data-en="Overall Radar — Top 5" data-ru="Общий радар — Топ 5"></div>
+        <div class="radar-canvas-wrap">
+          <canvas id="radarChart" width="380" height="380"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     CATEGORY WINNERS
+     ════════════════════════════════════════════════════════════ -->
+<section class="winners-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-en="Category Winners" data-ru="Победители по категориям"></div>
+      <h2 class="section-title" data-en="THE BEST IN CLASS" data-ru="ЛУЧШИЕ В СВОЁМ КЛАССЕ"></h2>
+    </div>
+    <div class="winners-grid" id="winnersGrid"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     PRICING TIERS
+     ════════════════════════════════════════════════════════════ -->
+<section class="pricing-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-en="Pricing Landscape" data-ru="Ценовой ландшафт"></div>
+      <h2 class="section-title" data-en="PRICING TIERS" data-ru="ЦЕНОВЫЕ КАТЕГОРИИ"></h2>
+    </div>
+    <div class="pricing-tiers" id="pricingTiers"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     FLOWCHART
+     ════════════════════════════════════════════════════════════ -->
+<section class="flowchart-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-en="Decision Guide" data-ru="Руководство по выбору"></div>
+      <h2 class="section-title" data-en="HOW TO CHOOSE" data-ru="КАК ВЫБРАТЬ"></h2>
+    </div>
+    <div class="flowchart reveal" id="flowchart"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     SOCIAL MEDIA RECOMMENDATIONS
+     ════════════════════════════════════════════════════════════ -->
+<section class="social-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label" data-en="Platform Recommendations" data-ru="Рекомендации по платформам"></div>
+      <h2 class="section-title" data-en="SOCIAL MEDIA PICKS" data-ru="ВЫБОР ДЛЯ СОЦСЕТЕЙ"></h2>
+    </div>
+    <div class="social-grid" id="socialGrid"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     FOOTER
+     ════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-sources" data-en="Sources:" data-ru="Источники:"></div>
+    <div class="footer-sources" id="footerSources"></div>
+    <div class="footer-copy" data-en="AI Image Generators Infographic — March 2026 — Research & Design" data-ru="Инфографика ИИ-генераторов изображений — Март 2026 — Исследование и дизайн"></div>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════════════════════ */
+const models = [
+  { name:'GPT Image 1.5', provider:'OpenAI', score:1264, price:'$0.04–0.08/img', priceRu:'$0.04–0.08/изобр.', speed:'5–8s', speedVal:6.5, textQ:95, bestEn:'Marketing, Branding', bestRu:'Маркетинг, Брендинг', quality:98, easeOfUse:92, priceScore:60 },
+  { name:'Gemini 3 Pro', provider:'Google', score:1235, price:'Free tier + API', priceRu:'Бесплатно + API', speed:'3–5s', speedVal:4, textQ:90, bestEn:'Speed-critical tasks', bestRu:'Задачи, где важна скорость', quality:94, easeOfUse:90, priceScore:85 },
+  { name:'Flux 2 Max', provider:'Black Forest Labs', score:1168, price:'Free / Cloud', priceRu:'Бесплатно / Облако', speed:'6–10s', speedVal:8, textQ:75, bestEn:'Customization, Open-source', bestRu:'Кастомизация, Open-source', quality:90, easeOfUse:65, priceScore:95 },
+  { name:'Hunyuan 3.0', provider:'Tencent', score:1152, price:'$0.02–0.05/img', priceRu:'$0.02–0.05/изобр.', speed:'5–10s', speedVal:7.5, textQ:70, bestEn:'Anime, Characters', bestRu:'Аниме, Персонажи', quality:88, easeOfUse:60, priceScore:88 },
+  { name:'Seedream 4.5', provider:'ByteDance', score:1147, price:'$0.02–0.04/img', priceRu:'$0.02–0.04/изобр.', speed:'4–8s', speedVal:6, textQ:70, bestEn:'E-commerce, Fashion', bestRu:'E-commerce, Мода', quality:87, easeOfUse:65, priceScore:90 },
+  { name:'Midjourney v7', provider:'Midjourney', score:1138, price:'$10–120/mo', priceRu:'$10–120/мес', speed:'10–30s', speedVal:20, textQ:40, bestEn:'Artistic, Creative', bestRu:'Художественные, Креатив', quality:95, easeOfUse:70, priceScore:50 },
+  { name:'DALL-E 3.5', provider:'OpenAI', score:1125, price:'$20/mo + API', priceRu:'$20/мес + API', speed:'5–10s', speedVal:7.5, textQ:85, bestEn:'Ease of use', bestRu:'Простота использования', quality:86, easeOfUse:95, priceScore:65 },
+  { name:'Adobe Firefly 3', provider:'Adobe', score:1115, price:'$59.99/mo CC', priceRu:'$59.99/мес CC', speed:'5–8s', speedVal:6.5, textQ:80, bestEn:'Commercial safety', bestRu:'Коммерческая безопасность', quality:84, easeOfUse:85, priceScore:30 },
+  { name:'Ideogram v2', provider:'Ideogram', score:1100, price:'$8+/mo', priceRu:'$8+/мес', speed:'8–15s', speedVal:11, textQ:90, bestEn:'Text in images, Logos', bestRu:'Текст в изображениях, Логотипы', quality:82, easeOfUse:80, priceScore:75 },
+  { name:'Stable Diff. 3.5', provider:'Stability AI', score:1095, price:'Free / Self-host', priceRu:'Бесплатно / Свой сервер', speed:'Varies', speedVal:15, textQ:60, bestEn:'Full control, Privacy', bestRu:'Полный контроль, Приватность', quality:80, easeOfUse:40, priceScore:100 },
+  { name:'Canva AI', provider:'Canva', score:null, price:'Free / $14.99/mo', priceRu:'Бесплатно / $14.99/мес', speed:'3–5s', speedVal:4, textQ:75, bestEn:'Social media workflows', bestRu:'Workflow для соцсетей', quality:70, easeOfUse:98, priceScore:80 },
+  { name:'Meta AI (Emu)', provider:'Meta', score:null, price:'Free', priceRu:'Бесплатно', speed:'2–5s', speedVal:3.5, textQ:65, bestEn:'Instagram / Facebook', bestRu:'Instagram / Facebook', quality:72, easeOfUse:92, priceScore:100 },
+];
+
+const winners = [
+  { cat:'overall', icon:'&#9733;', model:'GPT Image 1.5', enCat:'Best Overall', ruCat:'Лучшая в целом', enReason:'Highest LM Arena score (1264), 95% text accuracy, iterative editing, fast generation.', ruReason:'Наивысший рейтинг LM Arena (1264), 95% точность текста, итеративное редактирование.' },
+  { cat:'social', icon:'&#9889;', model:'Canva AI', enCat:'Best for Social Media', ruCat:'Лучшая для соцсетей', enReason:'Built into the design platform millions already use. Templates, instant resize, team collaboration.', ruReason:'Встроена в платформу дизайна. Шаблоны, мгновенный ресайз, командная работа.' },
+  { cat:'free', icon:'&#9881;', model:'Meta AI / Flux 2', enCat:'Best Free Option', ruCat:'Лучший бесплатный вариант', enReason:'Meta AI is free in-app; Flux 2 Max is open-weight with full customization potential.', ruReason:'Meta AI бесплатна в приложении; Flux 2 Max — открытые веса и полная кастомизация.' },
+  { cat:'text', icon:'&#9998;', model:'Ideogram v2', enCat:'Best for Text in Images', ruCat:'Лучшая для текста в изобр.', enReason:'90% text rendering accuracy. Logos, signs, banners, memes — text is always crisp and readable.', ruReason:'90% точность рендеринга текста. Логотипы, вывески, баннеры, мемы — текст всегда чёткий.' },
+  { cat:'art', icon:'&#9830;', model:'Midjourney v7', enCat:'Best Artistic Quality', ruCat:'Лучшее художественное качество', enReason:'Unmatched aesthetic coherence, v7 architecture rebuild, 30-40% fewer bad generations.', ruReason:'Непревзойдённая эстетическая когерентность, новая архитектура v7, на 30–40% меньше брака.' },
+  { cat:'ecom', icon:'&#9733;', model:'Seedream 4.5', enCat:'Best for E-commerce', ruCat:'Лучшая для e-commerce', enReason:'ByteDance model optimized for product photography, fashion, and catalog generation at $0.02–0.04/image.', ruReason:'Модель ByteDance для товарной фотографии, моды и каталогов по $0.02–0.04 за изображение.' },
+];
+
+const pricingTiers = [
+  { nameEn:'FREE', nameRu:'БЕСПЛАТНО', priceEn:'$0', priceRu:'$0', models:['Meta AI (Emu)','Stable Diffusion 3.5','Flux 2 Max','Canva AI (basic)'], highlight:false },
+  { nameEn:'BUDGET', nameRu:'БЮДЖЕТ', priceEn:'$8–20/mo', priceRu:'$8–20/мес', models:['Ideogram v2','Canva Pro','DALL-E 3.5 (Plus)','Midjourney Basic'], highlight:true },
+  { nameEn:'PREMIUM', nameRu:'ПРЕМИУМ', priceEn:'$20–60/mo', priceRu:'$20–60/мес', models:['Midjourney Pro','Adobe Firefly 3','GPT Image 1.5 (Pro)'], highlight:false },
+  { nameEn:'ENTERPRISE', nameRu:'КОРПОРАТИВ', priceEn:'API / Custom', priceRu:'API / Заказ', models:['GPT Image 1.5 API','Gemini 3 Pro API','Hunyuan 3.0 API','Seedream 4.5 API'], highlight:false },
+];
+
+const socialPlatforms = [
+  { icon:'&#128247;', name:'Instagram', enRec:'<strong>Midjourney v7</strong> for aesthetic feed posts. <strong>Canva AI</strong> for Stories & Reels covers. <strong>GPT Image 1.5</strong> for carousel infographics with text.', ruRec:'<strong>Midjourney v7</strong> для эстетичных постов. <strong>Canva AI</strong> для Stories и обложек Reels. <strong>GPT Image 1.5</strong> для каруселей с текстом.' },
+  { icon:'&#127909;', name:'TikTok', enRec:'<strong>Meta AI</strong> for quick trending visuals. <strong>Flux 2 Max</strong> for unique photorealistic thumbnails. Speed matters — pick fast generators.', ruRec:'<strong>Meta AI</strong> для быстрых трендовых визуалов. <strong>Flux 2 Max</strong> для уникальных фотореалистичных обложек. Скорость важна.' },
+  { icon:'&#120143;', name:'X / Twitter', enRec:'<strong>Ideogram v2</strong> for text-heavy memes and infographics. <strong>Grok Aurora</strong> for real-time trend-aware visuals directly on platform.', ruRec:'<strong>Ideogram v2</strong> для мемов и инфографик с текстом. <strong>Grok Aurora</strong> для визуалов, привязанных к трендам на платформе.' },
+  { icon:'&#128188;', name:'LinkedIn', enRec:'<strong>Adobe Firefly 3</strong> for commercially safe professional graphics. <strong>GPT Image 1.5</strong> for branded thought-leadership visuals.', ruRec:'<strong>Adobe Firefly 3</strong> для коммерчески безопасной профграфики. <strong>GPT Image 1.5</strong> для брендированных визуалов.' },
+  { icon:'&#128077;', name:'Facebook', enRec:'<strong>Meta AI (Emu)</strong> — native integration, free, optimized for the platform. <strong>Canva AI</strong> for event covers and ad creatives.', ruRec:'<strong>Meta AI (Emu)</strong> — нативная интеграция, бесплатно. <strong>Canva AI</strong> для обложек событий и рекламных креативов.' },
+];
+
+const sources = [
+  { title:'WaveSpeed AI — Best AI Image Generators 2026', url:'https://wavespeed.ai/blog/posts/best-ai-image-generators-2026/' },
+  { title:'Zapier — 8 Best AI Image Generators 2026', url:'https://zapier.com/blog/best-ai-image-generator/' },
+  { title:'AI/ML API — Ultimate Expert Guide', url:'https://aimlapi.com/blog/the-best-ai-image-generators' },
+  { title:'vc.ru — ТОП-12 нейросетей для генерации изображений', url:'https://vc.ru/services/2774475-luchshie-neuroseti-dlya-generacii-izobrazhenij' },
+  { title:'Хабр — Рейтинг ИИ для создания фото 2026', url:'https://habr.com/ru/companies/tehrevizor/articles/989602/' },
+  { title:'Awesome Agents — Midjourney vs DALL-E vs Flux', url:'https://awesomeagents.ai/tools/best-ai-image-generators-2026/' },
+  { title:'ImagineArt — AI Image Generation Cost 2026', url:'https://www.imagine.art/blogs/ai-image-generation-cost' },
+];
+
+/* ═══════════════════════════════════════════════════════════
+   LANGUAGE SYSTEM
+   ═══════════════════════════════════════════════════════════ */
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.setAttribute('data-lang', lang);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const text = el.getAttribute('data-' + lang);
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.value = text;
+    else el.innerHTML = text;
+  });
+  buildTable();
+  buildWinners();
+  buildPricing();
+  buildSocial();
+  buildSources();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUILD TABLE
+   ═══════════════════════════════════════════════════════════ */
+function buildTable() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  models.forEach((m, i) => {
+    const scoreTier = m.score >= 1200 ? 'score-tier-1' : m.score >= 1100 ? 'score-tier-2' : 'score-tier-3';
+    const tqClass = m.textQ >= 90 ? 'tq-excellent' : m.textQ >= 75 ? 'tq-good' : m.textQ >= 60 ? 'tq-fair' : 'tq-low';
+    const speedPct = Math.max(10, 100 - (m.speedVal / 30) * 100);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div class="rank-num ${i < 3 ? 'top-3' : ''}">${i + 1}</div></td>
+      <td><div class="model-name">${m.name}</div><div class="model-provider">${m.provider}</div></td>
+      <td><span class="score-badge ${scoreTier}">${m.score ?? '—'}</span></td>
+      <td><span class="price-cell">${currentLang === 'ru' ? m.priceRu : m.price}</span></td>
+      <td><div class="speed-bar-wrap"><div class="speed-bar" style="width:${speedPct}%;background:var(--gradient-bar);"></div><span class="speed-label">${m.speed}</span></div></td>
+      <td><div class="text-quality-bar-wrap"><div class="text-quality-bar-bg"><div class="text-quality-bar-fill ${tqClass}" style="width:${m.textQ}%"></div></div><span class="text-quality-pct" style="color:var(${tqClass === 'tq-excellent' ? '--accent-cyan' : tqClass === 'tq-good' ? '--accent-violet' : tqClass === 'tq-fair' ? '--accent-orange' : '--accent-magenta'})">${m.textQ}%</span></div></td>
+      <td><span class="best-for-tag">${currentLang === 'ru' ? m.bestRu : m.bestEn}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUILD CHARTS
+   ═══════════════════════════════════════════════════════════ */
+function buildBarCharts() {
+  // Quality chart
+  const qChart = document.getElementById('qualityChart');
+  qChart.innerHTML = '';
+  const sorted = [...models].filter(m => m.score).sort((a, b) => b.score - a.score);
+  sorted.forEach((m, i) => {
+    const pct = (m.score / 1300) * 100;
+    const colors = ['bar-gradient-1','bar-gradient-2','bar-gradient-3','bar-gradient-4','bar-gradient-5'];
+    qChart.innerHTML += `<div class="bar-row"><span class="bar-label">${m.name}</span><div class="bar-track"><div class="bar-fill ${colors[i % 5]}" style="width:${pct}%" data-value="${m.score}"></div></div></div>`;
+  });
+
+  // Text quality chart
+  const tChart = document.getElementById('textChart');
+  tChart.innerHTML = '';
+  const textSorted = [...models].sort((a, b) => b.textQ - a.textQ);
+  textSorted.forEach((m, i) => {
+    const tqClass = m.textQ >= 90 ? 'bar-gradient-1' : m.textQ >= 75 ? 'bar-gradient-2' : m.textQ >= 60 ? 'bar-gradient-5' : 'bar-gradient-3';
+    tChart.innerHTML += `<div class="bar-row"><span class="bar-label">${m.name}</span><div class="bar-track"><div class="bar-fill ${tqClass}" style="width:${m.textQ}%" data-value="${m.textQ}%"></div></div></div>`;
+  });
+
+  // Speed chart (lower is better, invert for visual)
+  const sChart = document.getElementById('speedChart');
+  sChart.innerHTML = '';
+  const speedSorted = [...models].sort((a, b) => a.speedVal - b.speedVal);
+  speedSorted.forEach((m, i) => {
+    const pct = Math.max(10, 100 - (m.speedVal / 30) * 80);
+    sChart.innerHTML += `<div class="bar-row"><span class="bar-label">${m.name}</span><div class="bar-track"><div class="bar-fill bar-gradient-4" style="width:${pct}%" data-value="${m.speed}"></div></div></div>`;
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RADAR CHART (Canvas)
+   ═══════════════════════════════════════════════════════════ */
+function drawRadar() {
+  const canvas = document.getElementById('radarChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = 380 * dpr;
+  canvas.height = 380 * dpr;
+  ctx.scale(dpr, dpr);
+  canvas.style.width = '380px';
+  canvas.style.height = '380px';
+
+  const cx = 190, cy = 190, maxR = 140;
+  const labels = currentLang === 'ru'
+    ? ['Качество','Скорость','Цена','Текст','Удобство']
+    : ['Quality','Speed','Price','Text','Ease of Use'];
+  const n = labels.length;
+  const angleStep = (Math.PI * 2) / n;
+  const startAngle = -Math.PI / 2;
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  for (let ring = 1; ring <= 5; ring++) {
+    const r = (ring / 5) * maxR;
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const a = startAngle + i * angleStep;
+      const x = cx + Math.cos(a) * r;
+      const y = cy + Math.sin(a) * r;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+  // Axes
+  for (let i = 0; i < n; i++) {
+    const a = startAngle + i * angleStep;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(a) * maxR, cy + Math.sin(a) * maxR);
+    ctx.stroke();
+  }
+  // Labels
+  ctx.fillStyle = '#8b89a0';
+  ctx.font = '11px "JetBrains Mono"';
+  ctx.textAlign = 'center';
+  for (let i = 0; i < n; i++) {
+    const a = startAngle + i * angleStep;
+    const lx = cx + Math.cos(a) * (maxR + 22);
+    const ly = cy + Math.sin(a) * (maxR + 22);
+    ctx.fillText(labels[i], lx, ly + 4);
+  }
+
+  // Data for top 5
+  const top5 = [
+    { name:'GPT Image 1.5', vals:[98,78,60,95,92], color:'rgba(0,229,255,0.7)', fill:'rgba(0,229,255,0.08)' },
+    { name:'Gemini 3 Pro', vals:[94,92,85,90,90], color:'rgba(157,78,221,0.7)', fill:'rgba(157,78,221,0.08)' },
+    { name:'Midjourney v7', vals:[95,40,50,40,70], color:'rgba(255,45,170,0.7)', fill:'rgba(255,45,170,0.08)' },
+    { name:'Flux 2 Max', vals:[90,65,95,75,65], color:'rgba(163,255,18,0.7)', fill:'rgba(163,255,18,0.08)' },
+    { name:'Ideogram v2', vals:[82,55,75,90,80], color:'rgba(255,214,0,0.7)', fill:'rgba(255,214,0,0.08)' },
+  ];
+
+  top5.forEach(d => {
+    ctx.beginPath();
+    d.vals.forEach((v, i) => {
+      const a = startAngle + i * angleStep;
+      const r = (v / 100) * maxR;
+      const x = cx + Math.cos(a) * r;
+      const y = cy + Math.sin(a) * r;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = d.fill;
+    ctx.fill();
+    ctx.strokeStyle = d.color;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Points
+    d.vals.forEach((v, i) => {
+      const a = startAngle + i * angleStep;
+      const r = (v / 100) * maxR;
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 3, 0, Math.PI * 2);
+      ctx.fillStyle = d.color;
+      ctx.fill();
+    });
+  });
+
+  // Legend
+  const legendY = 370;
+  const legendStartX = 190 - (top5.length * 72) / 2;
+  ctx.font = '9px "JetBrains Mono"';
+  top5.forEach((d, i) => {
+    const lx = legendStartX + i * 76;
+    ctx.fillStyle = d.color;
+    ctx.fillRect(lx, legendY - 5, 8, 8);
+    ctx.fillStyle = '#8b89a0';
+    ctx.textAlign = 'left';
+    ctx.fillText(d.name.split(' ')[0], lx + 12, legendY + 3);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUILD WINNERS
+   ═══════════════════════════════════════════════════════════ */
+function buildWinners() {
+  const grid = document.getElementById('winnersGrid');
+  grid.innerHTML = '';
+  winners.forEach((w, i) => {
+    const card = document.createElement('div');
+    card.className = `winner-card cat-${w.cat} reveal reveal-delay-${i % 6}`;
+    card.innerHTML = `
+      <span class="winner-icon">${w.icon}</span>
+      <div class="winner-category">${currentLang === 'ru' ? w.ruCat : w.enCat}</div>
+      <div class="winner-model">${w.model}</div>
+      <div class="winner-reason">${currentLang === 'ru' ? w.ruReason : w.enReason}</div>
+    `;
+    grid.appendChild(card);
+  });
+  observeReveals();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUILD PRICING
+   ═══════════════════════════════════════════════════════════ */
+function buildPricing() {
+  const container = document.getElementById('pricingTiers');
+  container.innerHTML = '';
+  pricingTiers.forEach((t, i) => {
+    const div = document.createElement('div');
+    div.className = `pricing-tier reveal reveal-delay-${i} ${t.highlight ? 'tier-highlight' : ''}`;
+    div.innerHTML = `
+      <div class="tier-name">${currentLang === 'ru' ? t.nameRu : t.nameEn}</div>
+      <div class="tier-price">${currentLang === 'ru' ? t.priceRu : t.priceEn}</div>
+      <ul class="tier-models">${t.models.map(m => `<li>${m}</li>`).join('')}</ul>
+    `;
+    container.appendChild(div);
+  });
+  observeReveals();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUILD FLOWCHART
+   ═══════════════════════════════════════════════════════════ */
+function buildFlowchart() {
+  const fc = document.getElementById('flowchart');
+  const isRu = currentLang === 'ru';
+  fc.innerHTML = `
+    <div class="flow-node flow-question">
+      <div class="flow-question-text" data-en="What's your primary need?" data-ru="Какая ваша главная задача?">${isRu ? 'Какая ваша главная задача?' : "What's your primary need?"}</div>
+    </div>
+    <div class="flow-line-v"></div>
+    <div class="flow-row">
+      <div class="flow-branch">
+        <div class="flow-branch-label" data-en="Text in Images" data-ru="Текст в изобр.">${isRu ? 'Текст в изобр.' : 'Text in Images'}</div>
+        <div class="flow-line-v"></div>
+        <div class="flow-node flow-answer">
+          <div class="flow-answer-text">Ideogram v2</div>
+          <div class="flow-answer-sub">GPT Image 1.5</div>
+        </div>
+      </div>
+      <div class="flow-branch">
+        <div class="flow-branch-label" data-en="Artistic Style" data-ru="Худож. стиль">${isRu ? 'Худож. стиль' : 'Artistic Style'}</div>
+        <div class="flow-line-v"></div>
+        <div class="flow-node flow-answer">
+          <div class="flow-answer-text">Midjourney v7</div>
+          <div class="flow-answer-sub">Flux 2 Max</div>
+        </div>
+      </div>
+      <div class="flow-branch">
+        <div class="flow-branch-label" data-en="Speed" data-ru="Скорость">${isRu ? 'Скорость' : 'Speed'}</div>
+        <div class="flow-line-v"></div>
+        <div class="flow-node flow-answer">
+          <div class="flow-answer-text">Gemini 3 Pro</div>
+          <div class="flow-answer-sub">Meta AI</div>
+        </div>
+      </div>
+      <div class="flow-branch">
+        <div class="flow-branch-label" data-en="Free" data-ru="Бесплатно">${isRu ? 'Бесплатно' : 'Free'}</div>
+        <div class="flow-line-v"></div>
+        <div class="flow-node flow-answer">
+          <div class="flow-answer-text">Stable Diff. 3.5</div>
+          <div class="flow-answer-sub">Meta AI / Flux 2</div>
+        </div>
+      </div>
+      <div class="flow-branch">
+        <div class="flow-branch-label" data-en="E-commerce" data-ru="E-commerce">${isRu ? 'E-commerce' : 'E-commerce'}</div>
+        <div class="flow-line-v"></div>
+        <div class="flow-node flow-answer">
+          <div class="flow-answer-text">Seedream 4.5</div>
+          <div class="flow-answer-sub">Canva AI</div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-line-v" style="height:24px"></div>
+    <div class="flow-node flow-question" style="max-width:460px;">
+      <div class="flow-question-text" data-en="Need social media integration?" data-ru="Нужна интеграция с соцсетями?">${isRu ? 'Нужна интеграция с соцсетями?' : 'Need social media integration?'}</div>
+    </div>
+    <div class="flow-line-v"></div>
+    <div class="flow-row">
+      <div class="flow-branch">
+        <div class="flow-branch-label yes" data-en="Yes" data-ru="Да">${isRu ? 'Да' : 'Yes'}</div>
+        <div class="flow-line-v"></div>
+        <div class="flow-node flow-answer">
+          <div class="flow-answer-text">Canva AI</div>
+          <div class="flow-answer-sub" data-en="Templates + Publishing" data-ru="Шаблоны + Публикация">${isRu ? 'Шаблоны + Публикация' : 'Templates + Publishing'}</div>
+        </div>
+      </div>
+      <div class="flow-branch">
+        <div class="flow-branch-label no" data-en="No — Max Quality" data-ru="Нет — Макс. качество">${isRu ? 'Нет — Макс. качество' : 'No — Max Quality'}</div>
+        <div class="flow-line-v"></div>
+        <div class="flow-node flow-answer">
+          <div class="flow-answer-text">GPT Image 1.5</div>
+          <div class="flow-answer-sub" data-en="Best overall score" data-ru="Лучший общий рейтинг">${isRu ? 'Лучший общий рейтинг' : 'Best overall score'}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUILD SOCIAL
+   ═══════════════════════════════════════════════════════════ */
+function buildSocial() {
+  const grid = document.getElementById('socialGrid');
+  grid.innerHTML = '';
+  socialPlatforms.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = `social-card reveal reveal-delay-${i}`;
+    card.innerHTML = `
+      <span class="social-icon">${p.icon}</span>
+      <div class="social-platform">${p.name}</div>
+      <div class="social-rec">${currentLang === 'ru' ? p.ruRec : p.enRec}</div>
+    `;
+    grid.appendChild(card);
+  });
+  observeReveals();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BUILD SOURCES
+   ═══════════════════════════════════════════════════════════ */
+function buildSources() {
+  const container = document.getElementById('footerSources');
+  container.innerHTML = sources.map(s => `<a href="${s.url}" target="_blank" rel="noopener">${s.title}</a>`).join(' &middot; ');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INTERSECTION OBSERVER
+   ═══════════════════════════════════════════════════════════ */
+function observeReveals() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  setLang('en');
+  buildBarCharts();
+  buildFlowchart();
+  drawRadar();
+  observeReveals();
+
+  // Redraw radar on lang change
+  const origSetLang = setLang;
+  window.setLang = function(lang) {
+    origSetLang(lang);
+    buildFlowchart();
+    drawRadar();
+    buildBarCharts();
+  };
+});
+</script>
+
+</body>
+</html>
